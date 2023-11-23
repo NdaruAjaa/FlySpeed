@@ -83,39 +83,39 @@ class Main extends PluginBase implements Listener {
         }
     }
 
-    private function internalChange (Player $for, float $value) : void
-    {
-        $isOp = $for->hasPermission(DefaultPermissions::ROOT_OPERATOR);
+    private function internalChange(Player $for, float $value): void
+{
+    $isOp = $for->hasPermission(DefaultPermissions::ROOT_OPERATOR);
 
-        $boolAbilities = [
-            AbilitiesLayer::ABILITY_ALLOW_FLIGHT => $for->getAllowFlight(),
-            AbilitiesLayer::ABILITY_FLYING => $for->isFlying(),
-            AbilitiesLayer::ABILITY_NO_CLIP => !$for->hasBlockCollision(),
-            AbilitiesLayer::ABILITY_OPERATOR => $isOp,
-            AbilitiesLayer::ABILITY_TELEPORT => $for->hasPermission(DefaultPermissionNames::COMMAND_TELEPORT),
-            AbilitiesLayer::ABILITY_INVULNERABLE => $for->isCreative(),
-            AbilitiesLayer::ABILITY_MUTED => false,
-            AbilitiesLayer::ABILITY_WORLD_BUILDER => false,
-            AbilitiesLayer::ABILITY_INFINITE_RESOURCES => !$for->hasFiniteResources(),
-            AbilitiesLayer::ABILITY_LIGHTNING => false,
-            AbilitiesLayer::ABILITY_BUILD => !$for->isSpectator(),
-            AbilitiesLayer::ABILITY_MINE => !$for->isSpectator(),
-            AbilitiesLayer::ABILITY_DOORS_AND_SWITCHES => !$for->isSpectator(),
-            AbilitiesLayer::ABILITY_OPEN_CONTAINERS => !$for->isSpectator(),
-            AbilitiesLayer::ABILITY_ATTACK_PLAYERS => !$for->isSpectator(),
-            AbilitiesLayer::ABILITY_ATTACK_MOBS => !$for->isSpectator(),
-        ];
+    $boolAbilities = [
+        AbilitiesLayer::ABILITY_ALLOW_FLIGHT => $for->getAllowFlight(),
+        AbilitiesLayer::ABILITY_FLYING => $for->isFlying(),
+        AbilitiesLayer::ABILITY_NO_CLIP => !$for->hasBlockCollision(),
+        AbilitiesLayer::ABILITY_OPERATOR => $isOp,
+        AbilitiesLayer::ABILITY_TELEPORT => $for->hasPermission(DefaultPermissionNames::COMMAND_TELEPORT),
+        AbilitiesLayer::ABILITY_INVULNERABLE => $for->isCreative(),
+        AbilitiesLayer::ABILITY_MUTED => false,
+        AbilitiesLayer::ABILITY_WORLD_BUILDER => false,
+        AbilitiesLayer::ABILITY_INFINITE_RESOURCES => !$for->hasFiniteResources(),
+        AbilitiesLayer::ABILITY_LIGHTNING => false,
+        AbilitiesLayer::ABILITY_BUILD => !$for->isSpectator(),
+        AbilitiesLayer::ABILITY_MINE => !$for->isSpectator(),
+        AbilitiesLayer::ABILITY_DOORS_AND_SWITCHES => !$for->isSpectator(),
+        AbilitiesLayer::ABILITY_OPEN_CONTAINERS => !$for->isSpectator(),
+        AbilitiesLayer::ABILITY_ATTACK_PLAYERS => !$for->isSpectator(),
+        AbilitiesLayer::ABILITY_ATTACK_MOBS => !$for->isSpectator(),
+    ];
 
-        $for->getNetworkSession()->sendDataPacket(UpdateAbilitiesPacket::create(new AbilitiesData(
-            $isOp ? CommandPermissions::OPERATOR : CommandPermissions::NORMAL,
-            $isOp ? PlayerPermissions::OPERATOR : PlayerPermissions::MEMBER,
-                $for->getId(),
-            [
-                new AbilitiesLayer(
-                AbilitiesLayer::LAYER_BASE,
-                $boolAbilities,
-                $value / 20,
-                0.1
+    $for->getNetworkSession()->sendDataPacket(UpdateAbilitiesPacket::create(new AbilitiesData(
+        $isOp ? CommandPermissions::OPERATOR : CommandPermissions::NORMAL,
+        $isOp ? PlayerPermissions::OPERATOR : PlayerPermissions::MEMBER,
+        $for->getId(),
+        [
+            new AbilitiesLayer(
+            AbilitiesLayer::LAYER_BASE,
+            $boolAbilities,
+            $value / 20,
+            0.1
                 )
             ]
         )));
